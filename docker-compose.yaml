@@ -1,0 +1,75 @@
+
+version: '3'
+
+services:
+
+  postgre:
+    container_name: postgre
+    image: postgres:latest
+    restart: always  
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports: 
+     - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data 
+    networks:
+      - network
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_USER=${REDIS_USER}
+      - REDIS_USER_PASSWORD=${REDIS_USER_PASSWORD}
+    ports:
+      - "6380:6380"
+    volumes:
+      - redisdata:/var/lib/redis/data 
+    networks:
+      - network
+
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+    ports:
+      - 8081:8081
+    volumes:
+      - mongodata:/var/lib/mongo/data
+    networks:
+      - network
+  
+  neo4j:
+    container_name: neo4j
+    image: neo4j:latest
+    ports:
+      - 7474:7474
+    volumes:
+      - neo4j:/var/lib/neo4j/data
+    networks:
+      - network
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: elasticsearch:8.15.2
+    ports:
+      - 9300:9300
+    volumes:
+      - elasticsearch:/var/lib/elasticsearch/data
+    networks:
+      - network
+
+volumes:
+  pgdata:
+  redisdata: 
+  mongodata:
+  neo4j:
+  elasticsearch:
+
+networks:
+  network:
+    driver: bridge
