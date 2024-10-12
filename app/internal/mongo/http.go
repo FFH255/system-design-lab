@@ -5,7 +5,7 @@ import (
 )
 
 func ServeHTTP(defaultRouter *mux.Router, handler *Handler) {
-	r := defaultRouter.PathPrefix("/group").Subrouter()
+	r := defaultRouter.PathPrefix("/mongo/group").Subrouter()
 
 	r.HandleFunc("", handler.Create).Methods("POST")
 	r.HandleFunc("/{id}", handler.Get).Methods("GET")

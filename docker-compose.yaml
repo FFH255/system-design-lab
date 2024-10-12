@@ -53,7 +53,7 @@ services:
     container_name: neo4j
     image: neo4j:latest
     ports:
-      - 7474:7474
+      - 7687:7687
     volumes:
       - neo4j:/var/lib/neo4j/data
       - ./logs/neo4j:/logs
