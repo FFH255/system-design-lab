@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/gorilla/mux"
 	"net/http"
+	elastic_search "sdl/app/internal/elastic-search"
 	"sdl/app/internal/mongo"
 	"sdl/app/internal/neo4j"
 	"sdl/app/internal/redis"
@@ -16,6 +17,7 @@ func main() {
 		_, _ = w.Write([]byte("pong"))
 	})
 
+	// Redis
 	redisClient := redis.New(r, redis.Config{
 		Address:  "localhost:6379",
 		Username: "user",
@@ -25,6 +27,7 @@ func main() {
 		_ = redisClient.Conn().Close()
 	}()
 
+	// mongo
 	mongoClient := mongo.New(r, &mongo.Config{
 		Address: "mongodb://user:user@localhost:27017",
 	})
@@ -33,6 +36,7 @@ func main() {
 		_ = mongoClient.Disconnect(context.TODO())
 	}()
 
+	// Neo4j
 	neo4jClient := neo4j.New(context.TODO(), r, &neo4j.Config{
 		URI:      "neo4j://localhost:7687",
 		User:     "neo4j",
@@ -42,6 +46,11 @@ func main() {
 	defer func() {
 		_ = neo4jClient.Close(context.TODO())
 	}()
+
+	// ElasticSearch
+	elastic_search.New(r, &elastic_search.Config{
+		Address: "http://localhost:9200",
+	})
 
 	_ = http.ListenAndServe(":3001", r)
 }

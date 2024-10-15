@@ -66,8 +66,10 @@ services:
     environment:
           - discovery.type=single-node
           - ES_JAVA_OPTS=-Xms512m -Xmx512m
+          - xpack.security.enabled=false
     ports:
-      - 9300:9300
+      - "9300:9300"
+      - "9200:9200"
     volumes:
       - elasticsearch:/var/lib/elasticsearch/data
       - ./logs/elasticsearch:/usr/share/elasticsearch/logs
