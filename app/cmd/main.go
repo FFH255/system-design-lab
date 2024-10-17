@@ -7,6 +7,7 @@ import (
 	elastic_search "sdl/app/internal/elastic-search"
 	"sdl/app/internal/mongo"
 	"sdl/app/internal/neo4j"
+	"sdl/app/internal/pg"
 	"sdl/app/internal/redis"
 )
 
@@ -51,6 +52,14 @@ func main() {
 	elastic_search.New(r, &elastic_search.Config{
 		Address: "http://localhost:9200",
 	})
+
+	// PostgreSQL
+	pgClient := pg.New(r, &pg.Config{
+		URL: "postgres://user:user@localhost:5432/user",
+	})
+	defer func() {
+		_ = pgClient.Close(context.TODO())
+	}()
 
 	_ = http.ListenAndServe(":3001", r)
 }
